@@ -1,6 +1,40 @@
+if [ -f $HOME/.bashrc ]; then
+        source $HOME/.bashrc
+fi
+
+
 parse_git_branch() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
+
+export CLICOLOR=1
+
+# iterm hotkey setup: https://stackoverflow.com/questions/30850430/iterm2-hide-show-like-guake
+
+
+# REVERSE-I-SEARCH
+# ignore these commands for reverse search in terminal
+export HISTIGNORE="ls:pwd:history:py3:ws:cd:h" #"cd:pwd:ls:history:l"
+HISTSIZE=10000
+HISTFILESIZE=$HISTSIZE
+HISTCONTROL=ignorespace:ignoredups
+# write to global history (append each time)
+_bash_history_sync() {
+    builtin history -a         #1
+    HISTFILESIZE=$HISTSIZE     #2
+    builtin history -c         #3
+    builtin history -r         #4
+}
+# prepend regular history command
+history() {                  #5
+    _bash_history_sync
+    builtin history "$@"
+}
+PROMPT_COMMAND=_bash_history_sync
+# alias
+alias h='history'
+
+
 
 # COLORS
 RESET='\033[0m'
@@ -20,13 +54,13 @@ LIGHTGRAY='\[\e[1;37m\]'
 alias l='ls -ahl'
 # date sorted
 alias ld='ls -ahl -lt' 
-# folder highlight
+# folder highlight: http://www.marinamele.com/2014/05/customize-colors-of-your-terminal-in-mac-os-x.html (order and color specification)
 export LSCOLORS="EHfxcxdxBxegecabagacad" 
 # for some reason this affects previous ls commands too (to highlight folders)
 alias ls='ls -alGH'   
 
 # bash line
-export PS1="${LIGHTGRAY}[\$(date +%H:%M)]${RESET}🍒${BLUE} \w${RESET}${GREEN}\$(parse_git_branch)${RESET}:\n "
+export PS1="${LIGHTGRAY}[\$(date +%H:%M)]${RESET}🍒${BLUE} \w${RESET}${GREEN}\$(parse_git_branch)${RESET}:\n"
 export PATH="/usr/local/bin:$PATH"
 # Created by `userpath` on 2020-08-18 22:48:28
 export PATH="$PATH:/Users/denis/.local/bin"
@@ -37,16 +71,19 @@ export PORT='5000'
 
 
 # FOLDERS
-alias ws='cd /Users/denis/Documents/PROJECTS/LocalNewsLab/ws_denis'
-alias lnl='cd /Users/denis/Documents/PROJECTS/LocalNewsLab'
-alias projects='cd /Users/denis/Documents/PROJECTS'
+alias ws='cd /Users/deniskazakov/Documents/WS'
 alias docs='cd ~/Documents'
 
 
 # PYENV
-# pyenv virtualenv 3.7.4 apps3 - to crate new environment
-alias py3='pyenv activate jupyter3'
-alias pylnl='pyenv activate lnl'
+export PATH="$HOME/.pyenv/bin:$PATH"
+export PATH="/usr/local/bin:$PATH"
+eval "$(pyenv virtualenv-init -)"
+export LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/bzip2/lib"
+export CPPFLAGS="-I/usr/local/opt/zlib/include -I/usr/local/opt/bzip2/include"
+# pyenv virtualenv 3.8.0 apps3 - to crate new environment
+alias py3='pyenv activate tools'
+alias pybark='pyenv activate bark'
 alias tiptip='cd /Users/denis/Documents/PROJECTS/tiptip; pyenv activate tiptip'
 alias jup='jupyter notebook'
 alias normal='pyenv deactivate'
@@ -54,6 +91,7 @@ alias normal='pyenv deactivate'
 # pip install sklearn eli5 pdpbox datetime tqdm pytest pandas numpy fastparquet lightgbm tsfresh lightgbm python-snappy pyarrow dvc notebook autopep8
 
 # alias python2='python'
+# https://medium.com/@henriquebastos/the-definitive-guide-to-setup-my-python-workspace-628d68552e14 - setup guide
 # At this point never use python2 and it only messes things up
 alias python='python3'
 export WORKON_HOME=~/.ve
@@ -69,6 +107,12 @@ alias light='jt -t default'
 # add ctrl-D multiselect to jupyter if it disappears
 alias multiselect='cat ~/bin/jupyter_multiselect.js >> ~/.jupyter/custom/custom.js'
 
+
+# PIP
+# install and skip pacakges that failed
+pip_install() {
+	cat $1 | sed -e '/^\s*#.*$/d' -e '/^\s*$/d' | xargs -n 1 pip install
+}
 
 # GIT
 alias gl='git log'

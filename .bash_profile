@@ -68,13 +68,12 @@ PURPLE='\[\e[1;35m\]'
 LIGHTGRAY='\[\e[1;37m\]'
 
 # BASICS
-alias l='ls -ahl'
-# date sorted
-alias ld='ls -ahl -lt' 
+# don't sort by time, don't show group 
+alias l='ls -ahlg'
 # folder highlight: http://www.marinamele.com/2014/05/customize-colors-of-your-terminal-in-mac-os-x.html (order and color specification)
 export LSCOLORS="EHfxcxdxBxegecabagacad" 
-# for some reason this affects previous ls commands too (to highlight folders)
-alias ls='ls -alGH'   
+# for some reason this affects previous ls commands too (to highlight folders) 
+alias ls='ls -ahlGt'   
 
 # bash line
 export PS1="${LIGHTGRAY}[\$(date +%H:%M)]${RESET}🍒${BLUE} \w${RESET}${GREEN}\$(parse_git_branch)${RESET}:\n"

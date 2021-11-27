@@ -13,10 +13,17 @@ export REMOTE_VM='35.207.51.76'
 # iterm hotkey setup: https://stackoverflow.com/questions/30850430/iterm2-hide-show-like-guake
 
 
+# download audio from youtube
+youdown(){
+cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/Documents/phone_files
+# -x for audio only, otherwise video too
+youtube-dl -x --audio-format mp3 $1
+}
+
 # REVERSE-I-SEARCH
 # ignore these commands for reverse search in terminal
 export HISTIGNORE="ls:pwd:history:py3:ws:cd:h" #"cd:pwd:ls:history:l"
-HISTSIZE=10000
+HISTSIZE=999999
 HISTFILESIZE=$HISTSIZE
 HISTCONTROL=ignorespace:ignoredups
 # write to global history (append each time)
@@ -81,8 +88,11 @@ export PORT='5000'
 
 
 # FOLDERS
-alias ws='cd /Users/deniskazakov/Documents/WS'
+alias ws='cd ~/Documents/WS'
 alias docs='cd ~/Documents'
+alias icloud='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/Documents'
+alias copybash='cp .bash_profile ~/.bash_profile'
+alias savebash='cp ~/.bash_profile .bash_profile'
 
 
 # PYENV
@@ -138,6 +148,9 @@ alias gp='git push'
 # DVC
 # dvc add, git add/commit/push, dvc push
 
+# OTHER SHORTCUTS
+alias sourceb='source ~/.bash_profile'
+
 
 
 
@@ -163,8 +176,12 @@ alias gp='git push'
 # 5 - Blinking
 # 7 - Reverse
 # 8 - Invisible
-export PATH="/usr/local/opt/node@12/bin:$PATH"
-. "$HOME/.cargo/env"
+##################################### (not my own automatically added stuff)
+
+
+
+# export PATH="/usr/local/opt/node@12/bin:$PATH"
+# . "$HOME/.cargo/env"
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/deniskazakov/Downloads/google-cloud-sdk/path.bash.inc' ]; then . '/Users/deniskazakov/Downloads/google-cloud-sdk/path.bash.inc'; fi

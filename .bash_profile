@@ -8,6 +8,7 @@ parse_git_branch() {
 }
 
 export CLICOLOR=1
+export REMOTE_VM='35.207.51.76'
 
 # iterm hotkey setup: https://stackoverflow.com/questions/30850430/iterm2-hide-show-like-guake
 
@@ -33,7 +34,16 @@ history() {                  #5
 PROMPT_COMMAND=_bash_history_sync
 # alias
 alias h='history'
+alias sound='sudo pkill -9 coreaudiod'
 
+# history search. Get only unique occurences of a passed string
+hs(){
+h | grep $1 | awk '{$1=""; print $0}' | sort --unique
+}
+
+killconn(){
+    lsof -ti:$1 | xargs kill -9
+}
 
 
 # COLORS
@@ -83,9 +93,9 @@ export LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/bzip2/lib"
 export CPPFLAGS="-I/usr/local/opt/zlib/include -I/usr/local/opt/bzip2/include"
 # pyenv virtualenv 3.8.0 apps3 - to crate new environment
 alias py3='pyenv activate tools'
-alias pybark='pyenv activate bark'
+alias pybark='pyenv activate jup37'
 alias tiptip='cd /Users/denis/Documents/PROJECTS/tiptip; pyenv activate tiptip'
-alias jup='jupyter notebook'
+alias jup='jupyter notebook --port 8889'
 alias normal='pyenv deactivate'
 # Basic pacakges
 # pip install sklearn eli5 pdpbox datetime tqdm pytest pandas numpy fastparquet lightgbm tsfresh lightgbm python-snappy pyarrow dvc notebook autopep8
@@ -154,3 +164,10 @@ alias gp='git push'
 # 7 - Reverse
 # 8 - Invisible
 export PATH="/usr/local/opt/node@12/bin:$PATH"
+. "$HOME/.cargo/env"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/deniskazakov/Downloads/google-cloud-sdk/path.bash.inc' ]; then . '/Users/deniskazakov/Downloads/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/deniskazakov/Downloads/google-cloud-sdk/completion.bash.inc' ]; then . '/Users/deniskazakov/Downloads/google-cloud-sdk/completion.bash.inc'; fi

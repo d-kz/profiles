@@ -9,13 +9,16 @@ parse_git_branch() {
 
 export CLICOLOR=1
 export REMOTE_VM='35.207.51.76'
+export RUNNING_ENV='local'
 
 # iterm hotkey setup: https://stackoverflow.com/questions/30850430/iterm2-hide-show-like-guake
 
 
 # download audio from youtube
 youdown(){
-cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/Documents/phone_files
+# cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/Documents/phone_files
+# -x for audio only, otherwise video too
+# cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/Documents/phone_files
 # -x for audio only, otherwise video too
 youtube-dl -x --audio-format mp3 $1
 }
@@ -42,6 +45,7 @@ PROMPT_COMMAND=_bash_history_sync
 # alias
 alias h='history'
 alias sound='sudo pkill -9 coreaudiod'
+alias vscode='code'
 
 # history search. Get only unique occurences of a passed string
 hs(){
@@ -51,6 +55,20 @@ h | grep $1 | awk '{$1=""; print $0}' | sort --unique
 killconn(){
     lsof -ti:$1 | xargs kill -9
 }
+
+music_dash(){
+    cd ~/Documents/WS/music
+    pyenv activate music
+    streamlit run st_transform.py
+}
+
+nlp(){
+    cd ~/Documents/WS/nlp
+    pyenv activate nlp
+    jup
+}
+
+alias touchbar='sudo pkill TouchBarServer'
 
 
 # COLORS
@@ -80,6 +98,8 @@ export PS1="${LIGHTGRAY}[\$(date +%H:%M)]${RESET}🍒${BLUE} \w${RESET}${GREEN}\
 export PATH="/usr/local/bin:$PATH"
 # Created by `userpath` on 2020-08-18 22:48:28
 export PATH="$PATH:/Users/denis/.local/bin"
+# conda
+# export PATH="/usr/local/anaconda3/bin:$PATH"  # commented out by conda initialize
 # for tiptip default flask server
 export PORT='5000'
 # export PYTHONPATH=/Users/denis/Documents/PROJECTS:/Users/denis/Documents/PROJECTS/LocalNewsLab:$PYTHONPATH
@@ -87,12 +107,15 @@ export PORT='5000'
 
 
 # FOLDERS
-alias ws='cd ~/Documents/WS'
+alias ws='cd ~/Documents/WSfull'
 alias docs='cd ~/Documents'
 alias icloud='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/Documents'
 alias copybash='cp .bash_profile ~/.bash_profile'
 alias savebash='cp ~/.bash_profile .bash_profile'
-
+alias snip='cd ~/Documents/WS/music/snippets'
+alias podcast='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/Documents/phone_files'
+alias getip='dig -4 TXT +short o-o.myaddr.l.google.com @ns1.google.com'
+alias gopro='python /Users/denis/Documents/WS/video_assistant/arrange_gopro_files.py'
 
 # PYENV
 export PATH="$HOME/.pyenv/bin:$PATH"
@@ -142,6 +165,8 @@ alias gau='git add -u'
 alias gr='git reset' # removes added files
 alias gc='git commit -m '
 alias gp='git push'
+alias gg="gp; git push heroku main"
+alias ggg="gc 'silly change'; gp; git push heroku main"
 # git rm --cached file1.txt    - remove file from git only 
 
 # DVC
@@ -187,3 +212,25 @@ if [ -f '/Users/deniskazakov/Downloads/google-cloud-sdk/path.bash.inc' ]; then .
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/deniskazakov/Downloads/google-cloud-sdk/completion.bash.inc' ]; then . '/Users/deniskazakov/Downloads/google-cloud-sdk/completion.bash.inc'; fi
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/usr/local/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/usr/local/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/usr/local/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/usr/local/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"
+export PATH="/opt/homebrew/bin:$PATH"
+
+# pyenv
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
